@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Map View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="MapViewControllerID" id="BYZ-38-t0r" customClass="MapViewController" customModule="TinkoffPoints" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Zwe-G7-zaa"/>
+                        <viewControllerLayoutGuide type="bottom" id="O76-2T-Gud"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BA5-Lc-C6C">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jsn-0o-B0x" customClass="UIButtonDesignable" customModule="TinkoffPoints" customModuleProvider="target">
+                                <rect key="frame" x="309" y="308.5" width="50" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="rgL-dm-HNb"/>
+                                    <constraint firstAttribute="width" constant="50" id="wBn-ur-tJ0"/>
+                                </constraints>
+                                <state key="normal" image="ic_plus"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="zoomInTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fgx-kQ-b8w"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rft-mv-Jox" customClass="UIButtonDesignable" customModule="TinkoffPoints" customModuleProvider="target">
+                                <rect key="frame" x="309" y="374.5" width="50" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="3VX-JZ-kTL"/>
+                                    <constraint firstAttribute="height" constant="50" id="WSI-WW-6TU"/>
+                                </constraints>
+                                <state key="normal" image="ic_minus"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="zoomOutTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ciS-os-DIT"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UXc-A6-cK7" customClass="UIButtonDesignable" customModule="TinkoffPoints" customModuleProvider="target">
+                                <rect key="frame" x="309" y="456.5" width="50" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="5lp-hE-reo"/>
+                                    <constraint firstAttribute="width" constant="50" id="yLk-kL-T8T"/>
+                                </constraints>
+                                <state key="normal" image="ic_gps"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="myLocationTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qOv-OW-rx2"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="BA5-Lc-C6C" secondAttribute="trailing" id="8iK-gP-Mmw"/>
+                            <constraint firstItem="BA5-Lc-C6C" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="CRB-oW-Sft"/>
+                            <constraint firstItem="Rft-mv-Jox" firstAttribute="centerX" secondItem="jsn-0o-B0x" secondAttribute="centerX" id="KvX-DG-nfQ"/>
+                            <constraint firstItem="UXc-A6-cK7" firstAttribute="centerX" secondItem="Rft-mv-Jox" secondAttribute="centerX" id="Mb5-Aa-hE9"/>
+                            <constraint firstItem="UXc-A6-cK7" firstAttribute="top" secondItem="Rft-mv-Jox" secondAttribute="bottom" constant="32" id="X17-OK-yha"/>
+                            <constraint firstItem="O76-2T-Gud" firstAttribute="top" secondItem="BA5-Lc-C6C" secondAttribute="bottom" id="epD-ye-NHm"/>
+                            <constraint firstAttribute="trailing" secondItem="jsn-0o-B0x" secondAttribute="trailing" constant="16" id="hi1-yf-Kec"/>
+                            <constraint firstItem="Rft-mv-Jox" firstAttribute="top" secondItem="jsn-0o-B0x" secondAttribute="bottom" constant="16" id="l0E-pY-PdT"/>
+                            <constraint firstItem="BA5-Lc-C6C" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="nHl-R0-6G2"/>
+                            <constraint firstItem="jsn-0o-B0x" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qii-ya-alw"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="mapView" destination="BA5-Lc-C6C" id="iL8-l0-MCq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_gps" width="30" height="30"/>
+        <image name="ic_minus" width="30" height="30"/>
+        <image name="ic_plus" width="30" height="30"/>
+    </resources>
+</document>
