@@ -65,6 +65,10 @@ class MapViewController: UIViewController, MKMapViewDelegate
         presenter.removeAllAnnotations = { [unowned self] in
             self.mapView.removeAnnotations( self.mapView.annotations )
         }
+        
+        presenter.addAnnotations = { [unowned self] (annotations: [MKAnnotation]) in
+            self.mapView.addAnnotations(annotations)
+        }
     }
     
     

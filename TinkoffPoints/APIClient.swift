@@ -37,7 +37,7 @@ class APIClient
             .resume()
     }
     
-    public static func GetPoints(center: CLLocationCoordinate2D, radius: Double, callback: @escaping GetJsonCallback) {
+    public static func GetPoints(center: CLLocationCoordinate2D, radius: Int, callback: @escaping GetJsonCallback) {
         var urlComponents = URLComponents()
         
         urlComponents.scheme = "https"
@@ -98,31 +98,6 @@ extension URLSession
                 }
                 
                 callback(json, headers, nil)
-        }
-    }
-    
-    func dataTask(with url: URL, callback: @escaping APIClient.GetIconCallback) -> URLSessionDataTask {
-        return
-            self.dataTask(with: url) { (data, response, error) in
-                guard error == nil else {
-                    print("Request: \(url)\nError: \(error!.localizedDescription)")
-                    callback(nil, error)
-                    return
-                }
-                
-                guard data != nil else {
-                    print("Request: \(url)\nData: null")
-                    callback(nil, NSError())
-                    return
-                }
-                
-                guard let image = UIImage(data: data!) else {
-                    print("Request: \(url)\nInvalid data")
-                    callback(nil, NSError())
-                    return
-                }
-                
-                callback(image, nil)
         }
     }
 }

@@ -88,4 +88,8 @@ public class Point: NSManagedObject {
             return image
         }
     }
+    
+    public var name: String {
+        return partner?.name ?? ""
+    }
 }

@@ -81,7 +81,7 @@ class MapPresenter
     }
     
     public func mapRegionChanged(_ region: MKCoordinateRegion) {
-        let radius = region.radius
+        let radius = Int(region.radius)
         
         interactor.cachedPoints(
             center: region.center,
@@ -112,7 +112,7 @@ class MapPresenter
             if region.center == center {
                 self.interactor.cachedPoints(
                     center: center,
-                    radius: region.radius,
+                    radius: Int(region.radius),
                     callback: self.displayPoints(_:)
                 )
             }

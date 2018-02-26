@@ -25,7 +25,7 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="Partner" positionX="-182" positionY="99" width="128" height="118"/>
+        <element name="Partner" positionX="-182" positionY="99" width="128" height="120"/>
         <element name="Point" positionX="-362" positionY="99" width="128" height="120"/>
     </elements>
 </model>
