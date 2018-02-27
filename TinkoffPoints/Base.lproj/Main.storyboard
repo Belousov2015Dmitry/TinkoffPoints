@@ -21,6 +21,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="PHy-Lc-UjJ">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="color" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BA5-Lc-C6C">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </mapView>
@@ -78,28 +83,33 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="PHy-Lc-UjJ" secondAttribute="trailing" id="72u-aA-YvG"/>
                             <constraint firstAttribute="trailing" secondItem="BA5-Lc-C6C" secondAttribute="trailing" id="8iK-gP-Mmw"/>
                             <constraint firstItem="BA5-Lc-C6C" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="CRB-oW-Sft"/>
                             <constraint firstItem="Rft-mv-Jox" firstAttribute="centerX" secondItem="jsn-0o-B0x" secondAttribute="centerX" id="KvX-DG-nfQ"/>
                             <constraint firstItem="UXc-A6-cK7" firstAttribute="centerX" secondItem="Rft-mv-Jox" secondAttribute="centerX" id="Mb5-Aa-hE9"/>
                             <constraint firstItem="UXc-A6-cK7" firstAttribute="top" secondItem="Rft-mv-Jox" secondAttribute="bottom" constant="32" id="X17-OK-yha"/>
+                            <constraint firstItem="O76-2T-Gud" firstAttribute="top" secondItem="PHy-Lc-UjJ" secondAttribute="bottom" id="ZKH-eI-Zx6"/>
                             <constraint firstItem="O76-2T-Gud" firstAttribute="top" secondItem="BA5-Lc-C6C" secondAttribute="bottom" id="epD-ye-NHm"/>
                             <constraint firstAttribute="trailing" secondItem="jsn-0o-B0x" secondAttribute="trailing" constant="16" id="hi1-yf-Kec"/>
                             <constraint firstItem="Rft-mv-Jox" firstAttribute="top" secondItem="jsn-0o-B0x" secondAttribute="bottom" constant="16" id="l0E-pY-PdT"/>
                             <constraint firstItem="BA5-Lc-C6C" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="nHl-R0-6G2"/>
                             <constraint firstItem="jsn-0o-B0x" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qii-ya-alw"/>
+                            <constraint firstItem="PHy-Lc-UjJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ryF-vH-SPB"/>
+                            <constraint firstItem="PHy-Lc-UjJ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="sWe-YE-yOM"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="PHy-Lc-UjJ" id="1DE-yb-rpf"/>
                         <outlet property="mapView" destination="BA5-Lc-C6C" id="iL8-l0-MCq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
+            <point key="canvasLocation" x="140" y="107"/>
         </scene>
     </scenes>
     <resources>

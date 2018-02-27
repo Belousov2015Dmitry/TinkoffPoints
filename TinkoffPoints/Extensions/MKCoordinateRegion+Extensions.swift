@@ -7,20 +7,7 @@
 //
 
 import Foundation
-import CoreLocation.CLLocation
 import MapKit.MKGeometry
-
-
-extension CLLocationCoordinate2D
-{
-    
-    
-    static func == (left: CLLocationCoordinate2D, right: CLLocationCoordinate2D) -> Bool {
-        return
-            fabs(left.latitude - right.latitude) < 0.0000001 &&
-            fabs(left.longitude - right.longitude) < 0.0000001
-    }
-}
 
 
 

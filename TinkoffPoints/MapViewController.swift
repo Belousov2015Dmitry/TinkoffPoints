@@ -29,6 +29,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
     
     //MARK: - IBOutlet Views
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
     
     
@@ -62,12 +63,20 @@ class MapViewController: UIViewController, MKMapViewDelegate
             self.mapView.setCenter( coord, animated: true)
         }
         
-        presenter.removeAllAnnotations = { [unowned self] in
-            self.mapView.removeAnnotations( self.mapView.annotations )
+        presenter.displayAnnotations = { [unowned self] (freshAnnotations: [PointAnnotation]) -> Void in
+                self.mapView.removeAnnotations(self.mapView.annotations)
+                self.mapView.addAnnotations(freshAnnotations)
         }
         
-        presenter.addAnnotations = { [unowned self] (annotations: [MKAnnotation]) in
-            self.mapView.addAnnotations(annotations)
+        presenter.loaderHidden = { [unowned self] (hidden: Bool) in
+            if hidden {
+                self.activityIndicatorView.stopAnimating()
+                self.view.sendSubview(toBack: self.activityIndicatorView)
+            }
+            else {
+                self.activityIndicatorView.startAnimating()
+                self.view.bringSubview(toFront: self.activityIndicatorView)
+            }
         }
     }
     
@@ -93,6 +102,42 @@ class MapViewController: UIViewController, MKMapViewDelegate
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         presenter.mapRegionChanged(mapView.region)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let pointAnnotation = annotation as? PointAnnotation else {
+            return nil
+        }
+        
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "PointAnnotationID")
+        
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "PointAnnotationID")
+        }
+        else {
+            annotationView!.annotation = annotation
+        }
+        
+        annotationView!.canShowCallout = true
+        annotationView!.image = pointAnnotation.image.ofSize(width: 30, height: 30)?.rounded
+        
+        annotationView!.clipsToBounds = false
+        
+        let annotationLayer = annotationView!.layer
+        
+        annotationLayer.shadowColor = UIColor.black.cgColor
+        annotationLayer.shadowOpacity = 0.35
+        annotationLayer.shadowOffset = .zero
+        annotationLayer.shadowRadius = 6
+        annotationLayer.shadowPath = UIBezierPath(
+            roundedRect: CGRect(
+                origin: .zero,
+                size: CGSize(width: 30, height: 30)
+            ),
+            cornerRadius: 15
+        ).cgPath
+        
+        return annotationView
     }
 }
 

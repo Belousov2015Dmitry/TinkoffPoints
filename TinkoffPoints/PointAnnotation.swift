@@ -13,18 +13,18 @@ import MapKit.MKAnnotation
 
 class PointAnnotation : NSObject, MKAnnotation
 {
+    var id: String
     var coordinate: CLLocationCoordinate2D
     var title: String?
     var subtitle: String?
     var image: UIImage
     
     
-    init(title: String, image: UIImage, coordinate: CLLocationCoordinate2D) {
+    init(id: String, title: String, image: UIImage, coordinate: CLLocationCoordinate2D) {
+        self.id = id
         self.coordinate = coordinate
         self.title = title
         self.subtitle = nil
         self.image = image
-        
-        
     }
 }

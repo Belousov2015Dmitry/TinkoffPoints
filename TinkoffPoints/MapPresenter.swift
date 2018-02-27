@@ -21,11 +21,11 @@ class MapPresenter
     
     
     //MARK: - Callbacks
-    public var mapRegion: (() -> MKCoordinateRegion)? = nil
-    public var animateToRegion: ((_ region: MKCoordinateRegion) -> Void)? = nil
-    public var animateToCoordinate: ((_ region: CLLocationCoordinate2D) -> Void)? = nil
-    public var removeAllAnnotations: (() -> Void)? = nil
-    public var addAnnotations: ((_ annotations: [MKAnnotation]) -> Void)? = nil
+    public var mapRegion:            (()                                 -> MKCoordinateRegion)? = nil
+    public var animateToRegion:      ((_ region: MKCoordinateRegion)     -> Void)? = nil
+    public var animateToCoordinate:  ((_ region: CLLocationCoordinate2D) -> Void)? = nil
+    public var displayAnnotations:   ((_ annotations: [PointAnnotation]) -> Void)? = nil
+    public var loaderHidden:         ((_ hidden: Bool)                   -> Void)? = nil
     
     
     
@@ -117,14 +117,16 @@ class MapPresenter
                 )
             }
         }
+        
+        interactor.loading = { [unowned self] (active: Bool) in
+            self.loaderHidden?(!active)
+        }
     }
     
     private func displayPoints(_ points: [MapInteractor.PresentablePoint]) {
-        self.removeAllAnnotations?()
-        
-        self.addAnnotations?(
+        self.displayAnnotations?(
             points.map {
-                PointAnnotation(title: $0.title, image: $0.icon, coordinate: $0.coordinate)
+                PointAnnotation(id: $0.id, title: $0.title, image: $0.icon, coordinate: $0.coordinate)
             }
         )
     }

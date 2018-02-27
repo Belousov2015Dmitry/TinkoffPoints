@@ -14,13 +14,14 @@ import UIKit.UIImage
 
 class MapInteractor : NSObject, CLLocationManagerDelegate
 {
-    public typealias PresentablePoint = (title: String, icon: UIImage, coordinate: CLLocationCoordinate2D)
+    public typealias PresentablePoint = (id: String, title: String, icon: UIImage, coordinate: CLLocationCoordinate2D)
     
     
     
     //MARK: - Callbacks
     public var locationChanged: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
     public var pointsFetched: ((_ center: CLLocationCoordinate2D, _ radius: Double) -> Void)? = nil
+    public var loading: ((_ active: Bool) -> Void)? = nil
     
     
     
@@ -47,6 +48,8 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
     public func viewDidLoad() {
         locationManager.delegate = self
         
+        self.loading?(true)
+        
         requestPartners()
     }
     
@@ -62,6 +65,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
                 callback(
                     results.map { (point) -> PresentablePoint in
                         (
+                            id: point.externalId!,
                             title: point.name,
                             icon: point.icon,
                             coordinate: point.coordinate
@@ -87,7 +91,6 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
                 }
                 return
             }
-            
             
             self.writeContext.perform {
                 self.savePoint(jsonArray: jpoints)
@@ -127,12 +130,16 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
     private func requestPartners() {
         APIClient.GetPartners { [unowned self] (json, headers, error) in
             var needUpdate = false
+            var lastModifiedLocally = UserDefaults.standard.partnersLastModified()
 
             if
                 let lastModified = headers["Last-Modified"] as? String,
                 let date = self.dateFormatter.date(from: lastModified)
             {
-                needUpdate = UserDefaults.standard.partnersLastModified().timeIntervalSince1970 < date.timeIntervalSince1970
+                if lastModifiedLocally.timeIntervalSince1970 < date.timeIntervalSince1970 {
+                    lastModifiedLocally = date
+                    needUpdate = true
+                }
             }
             
             if(needUpdate) {
@@ -140,17 +147,24 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
                     json != nil,
                     let jpartners = json!["payload"] as? [ [String : Any] ]
                 else {
+                    DispatchQueue.main.async { self.loading?(false) }
                     return
                 }
                 
                 self.writeContext.perform {
                     self.savePartners(jsonArray: jpartners)
+                    UserDefaults.standard.setPartnersModifyDate(lastModifiedLocally)
+                    DispatchQueue.main.async { self.loading?(false) }
                 }
             }
             else if self.partners.isEmpty {
                 self.writeContext.perform {
-                    self.loadPartners()
+                    self.loadCachedPartners()
+                    DispatchQueue.main.async { self.loading?(false) }
                 }
+            }
+            else {
+                DispatchQueue.main.async { self.loading?(false) }
             }
         }
     }
@@ -185,7 +199,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
         }
     }
     
-    private func loadPartners() {
+    private func loadCachedPartners() {
         var freshPartners = [String : Partner]()
         
         do {
