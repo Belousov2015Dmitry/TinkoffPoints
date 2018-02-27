@@ -18,6 +18,8 @@ class MapPresenter
     
     private var needTrackLocation = true
     
+    private var lastRegion = MKCoordinateRegion()
+    
     
     
     //MARK: - Callbacks
@@ -81,15 +83,20 @@ class MapPresenter
     }
     
     public func mapRegionChanged(_ region: MKCoordinateRegion) {
-        let radius = Int(region.radius)
-        
-        interactor.cachedPoints(
-            center: region.center,
-            radius: radius,
-            callback: displayPoints(_:)
-        )
-        
-        interactor.requestPoints(center: region.center, radius: radius)
+        if !self.lastRegion.contains(region: region) {
+            self.lastRegion = region
+            
+            interactor.cachedPoints(
+                center: region.center,
+                span: CLLocationCoordinate2D(
+                    latitude: region.span.latitudeDelta,
+                    longitude: region.span.longitudeDelta
+                ),
+                callback: displayPoints(_:)
+            )
+            
+            interactor.requestPoints(center: region.center, radius: Int(region.radius))
+        }
     }
     
     
@@ -104,7 +111,7 @@ class MapPresenter
             }
         }
         
-        interactor.pointsFetched = { [unowned self] (center: CLLocationCoordinate2D, radius: Double) in
+        interactor.pointsFetched = { [unowned self] (center: CLLocationCoordinate2D, radius: Int) in
             guard let region = self.mapRegion?() else {
                 return
             }
@@ -112,7 +119,10 @@ class MapPresenter
             if region.center == center {
                 self.interactor.cachedPoints(
                     center: center,
-                    radius: Int(region.radius),
+                    span: CLLocationCoordinate2D(
+                        latitude: region.span.latitudeDelta,
+                        longitude: region.span.longitudeDelta
+                    ),
                     callback: self.displayPoints(_:)
                 )
             }

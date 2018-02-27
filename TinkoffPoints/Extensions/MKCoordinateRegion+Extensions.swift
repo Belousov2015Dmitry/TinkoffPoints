@@ -26,4 +26,30 @@ extension MKCoordinateRegion
         
         return northEast.distance(from: center)
     }
+    
+    func contains(region: MKCoordinateRegion) -> Bool {
+        let first = MKMapRect(
+            origin: MKMapPoint(
+                x: self.center.latitude - self.span.latitudeDelta / 2,
+                y: self.center.longitude - self.span.longitudeDelta / 2
+            ),
+            size: MKMapSize(
+                width: self.span.latitudeDelta,
+                height: self.span.longitudeDelta
+            )
+        )
+        
+        let second = MKMapRect(
+            origin: MKMapPoint(
+                x: region.center.latitude - region.span.latitudeDelta / 2,
+                y: region.center.longitude - region.span.longitudeDelta / 2
+            ),
+            size: MKMapSize(
+                width: region.span.latitudeDelta,
+                height: region.span.longitudeDelta
+            )
+        )
+        
+        return MKMapRectContainsRect(first, second)
+    }
 }

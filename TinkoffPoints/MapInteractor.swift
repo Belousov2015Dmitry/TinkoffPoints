@@ -20,7 +20,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
     
     //MARK: - Callbacks
     public var locationChanged: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
-    public var pointsFetched: ((_ center: CLLocationCoordinate2D, _ radius: Double) -> Void)? = nil
+    public var pointsFetched: ((_ center: CLLocationCoordinate2D, _ radius: Int) -> Void)? = nil
     public var loading: ((_ active: Bool) -> Void)? = nil
     
     
@@ -55,27 +55,41 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
     
     public func cachedPoints(
         center: CLLocationCoordinate2D,
-        radius: Int,
+        span: CLLocationCoordinate2D,
         callback: @escaping (_ points: [PresentablePoint]) -> Void
     ) {
         readContext.perform { [unowned self] in
+            print("ReadContext: \(Thread.current)")
+            
             do {
-                let results: [Point] = try self.readContext.fetch( Point.fetchRequest() )
+                let fetchRequest: NSFetchRequest<Point> = Point.fetchRequest()
                 
-                callback(
-                    results.map { (point) -> PresentablePoint in
-                        (
-                            id: point.externalId!,
-                            title: point.name,
-                            icon: point.icon,
-                            coordinate: point.coordinate
-                        )
-                    }
+                fetchRequest.predicate = NSPredicate(
+                    format: "latitude >= %f and latitude <= %f and longitude >= %f and longitude <= %f",
+                    center.latitude - span.latitude / 2,
+                    center.latitude + span.latitude / 2,
+                    center.longitude - span.longitude / 2,
+                    center.longitude + span.longitude / 2
                 )
+                
+                let results: [Point] = try self.readContext.fetch(fetchRequest)
+                
+                DispatchQueue.main.async {
+                    callback(
+                        results.map { (point) -> PresentablePoint in
+                            (
+                                id: point.externalId!,
+                                title: point.name,
+                                icon: point.icon,
+                                coordinate: point.coordinate
+                            )
+                        }
+                    )
+                }
             }
             catch {
                 print(error)
-                callback([])
+                DispatchQueue.main.async { callback([]) }
             }
         }
     }
@@ -94,6 +108,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
             
             self.writeContext.perform {
                 self.savePoint(jsonArray: jpoints)
+                DispatchQueue.main.async { self.pointsFetched?(center, radius) }
             }
         }
     }
@@ -114,16 +129,18 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
     
     //MARK: Managed Object Context
     private func createReadManagedObjectContext() -> NSManagedObjectContext {
-        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType) //main
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         context.parent = self.mainContext
         return context
     }
     
     private func createWriteManagedObjectContext() -> NSManagedObjectContext {
-        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType) //background
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         context.parent = self.mainContext
+        context.mergePolicy = NSOverwriteMergePolicy
         return context
     }
+    
     
     
     //MARK: Partners
@@ -152,13 +169,15 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
                 }
                 
                 self.writeContext.perform {
+                    print("WriteContext: \(Thread.current)")
+                    
                     self.savePartners(jsonArray: jpartners)
                     UserDefaults.standard.setPartnersModifyDate(lastModifiedLocally)
                     DispatchQueue.main.async { self.loading?(false) }
                 }
             }
             else if self.partners.isEmpty {
-                self.writeContext.perform {
+                self.readContext.perform {
                     self.loadCachedPartners()
                     DispatchQueue.main.async { self.loading?(false) }
                 }
@@ -174,28 +193,37 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
         
         for jpartner in jsonArray {
             guard
-                let partner = Partner.parse(json: jpartner, context: self.mainContext),
+                let partner = Partner.parse(json: jpartner, context: self.writeContext),
                 let data = APIClient.GetImageData(name: partner.picture!)
             else {
                 continue
             }
             
             partner.imageData = data
+            self.writeContext.insert(partner)
             
-            do {
-                partner.managedObjectContext?.mergePolicy = NSOverwriteMergePolicy
-                try partner.managedObjectContext?.save()
-                
-                freshPartners[partner.id!] = partner
-            }
-            catch {
-                print(error)
-            }
+            freshPartners[partner.id!] = partner
         }
     
-        self.partnersSerialQueue.sync { [unowned self] in
-            self.partners.removeAll()
-            self.partners.merge(freshPartners) { $1 }
+        do {
+            try self.writeContext.save()
+            
+            self.mainContext.performAndWait {
+                do {
+                    try self.mainContext.save()
+                }
+                catch {
+                    print(error)
+                }
+            }
+            
+            self.partnersSerialQueue.sync { [unowned self] in
+                self.partners.removeAll()
+                self.partners.merge(freshPartners) { $1 }
+            }
+        }
+        catch {
+            print(error)
         }
     }
     
@@ -224,7 +252,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
     private func savePoint(jsonArray: [ [String : Any] ]) {
         for jpoint in jsonArray {
             guard
-                let point = Point.parse(json: jpoint, context: self.mainContext)
+                let point = Point.parse(json: jpoint, context: self.writeContext)
             else {
                 continue
             }
@@ -233,13 +261,23 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
                 point.partner = self.partners[point.partnerName!]
             }
             
-            do {
-                point.managedObjectContext?.mergePolicy = NSOverwriteMergePolicy
-                try point.managedObjectContext?.save()
+            self.writeContext.insert(point)
+        }
+        
+        do {
+            try self.writeContext.save()
+            
+            self.mainContext.performAndWait {
+                do {
+                    try self.mainContext.save()
+                }
+                catch {
+                    print(error)
+                }
             }
-            catch {
-                print(error)
-            }
+        }
+        catch {
+            print(error)
         }
     }
 }

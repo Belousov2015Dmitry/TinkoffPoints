@@ -14,6 +14,7 @@
 		231227E82041B3640019E082 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 231227E72041B3640019E082 /* Assets.xcassets */; };
 		231227EB2041B3640019E082 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 231227E92041B3640019E082 /* LaunchScreen.storyboard */; };
 		231CAA0320421EB6006BA21C /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231CAA0220421EB6006BA21C /* APIClient.swift */; };
+		2353A60A2045FA9200C66DC7 /* PointsMergePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2353A6092045FA9200C66DC7 /* PointsMergePolicy.swift */; };
 		236AEF242042E5EC00AE1F67 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236AEF232042E5EC00AE1F67 /* UIView+Extensions.swift */; };
 		236AEF2820433B7D00AE1F67 /* MKCoordinateRegion+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236AEF2720433B7D00AE1F67 /* MKCoordinateRegion+Extensions.swift */; };
 		236AEF2A20433FC100AE1F67 /* PointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236AEF2920433FC100AE1F67 /* PointAnnotation.swift */; };
@@ -39,6 +40,7 @@
 		231227EA2041B3640019E082 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		231227EC2041B3640019E082 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		231CAA0220421EB6006BA21C /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		2353A6092045FA9200C66DC7 /* PointsMergePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsMergePolicy.swift; sourceTree = "<group>"; };
 		236AEF232042E5EC00AE1F67 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		236AEF2720433B7D00AE1F67 /* MKCoordinateRegion+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKCoordinateRegion+Extensions.swift"; sourceTree = "<group>"; };
 		236AEF2920433FC100AE1F67 /* PointAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointAnnotation.swift; sourceTree = "<group>"; };
@@ -91,7 +93,7 @@
 				23E58CF62041E00600B5FE4F /* MapPresenter.swift */,
 				23E58CF82041E09400B5FE4F /* MapInteractor.swift */,
 				236AEF2920433FC100AE1F67 /* PointAnnotation.swift */,
-				23E58D0A2041F4BC00B5FE4F /* Models */,
+				23E58D0A2041F4BC00B5FE4F /* CoreData */,
 				239B09632044B1FF00746A10 /* Extensions */,
 				231227E72041B3640019E082 /* Assets.xcassets */,
 				231227E12041B3640019E082 /* Main.storyboard */,
@@ -114,15 +116,16 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		23E58D0A2041F4BC00B5FE4F /* Models */ = {
+		23E58D0A2041F4BC00B5FE4F /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
 				23E58D132041F98D00B5FE4F /* Point+CoreDataClass.swift */,
 				23E58D142041F98D00B5FE4F /* Point+CoreDataProperties.swift */,
 				23E58D152041F98D00B5FE4F /* Partner+CoreDataClass.swift */,
 				23E58D162041F98D00B5FE4F /* Partner+CoreDataProperties.swift */,
+				2353A6092045FA9200C66DC7 /* PointsMergePolicy.swift */,
 			);
-			path = Models;
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,6 +209,7 @@
 				231227E62041B3640019E082 /* TinkoffPoints.xcdatamodeld in Sources */,
 				23E58CF92041E09400B5FE4F /* MapInteractor.swift in Sources */,
 				231CAA0320421EB6006BA21C /* APIClient.swift in Sources */,
+				2353A60A2045FA9200C66DC7 /* PointsMergePolicy.swift in Sources */,
 				236AEF242042E5EC00AE1F67 /* UIView+Extensions.swift in Sources */,
 				239B09672044B26900746A10 /* UIImage+Extsensions.swift in Sources */,
 				23E58D1E204204A800B5FE4F /* Constants.swift in Sources */,
