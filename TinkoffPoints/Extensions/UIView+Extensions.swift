@@ -54,4 +54,19 @@ extension UIView
             self.layer.cornerRadius = newValue
         }
     }
+    
+    
+    func addShadow() {
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.35
+        layer.shadowOffset = .zero
+        layer.shadowRadius = 6
+        layer.shadowPath = UIBezierPath(
+            roundedRect: CGRect(
+                origin: .zero,
+                size: CGSize(width: self.frame.width, height: self.frame.height)
+            ),
+            cornerRadius: self.frame.height / 2
+        ).cgPath
+    }
 }

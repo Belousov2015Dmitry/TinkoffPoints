@@ -105,6 +105,9 @@
                     <connections>
                         <outlet property="activityIndicatorView" destination="PHy-Lc-UjJ" id="1DE-yb-rpf"/>
                         <outlet property="mapView" destination="BA5-Lc-C6C" id="iL8-l0-MCq"/>
+                        <outlet property="myLocationButton" destination="UXc-A6-cK7" id="Z3v-2h-BDW"/>
+                        <outlet property="zoomInButton" destination="jsn-0o-B0x" id="caE-Nt-Ilu"/>
+                        <outlet property="zoomOutButton" destination="Rft-mv-Jox" id="ZxJ-As-HSd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

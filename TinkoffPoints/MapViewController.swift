@@ -30,6 +30,9 @@ class MapViewController: UIViewController, MKMapViewDelegate
     //MARK: - IBOutlet Views
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var zoomInButton: UIButton!
+    @IBOutlet weak var zoomOutButton: UIButton!
+    @IBOutlet weak var myLocationButton: UIButton!
     
     
     
@@ -42,6 +45,10 @@ class MapViewController: UIViewController, MKMapViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.zoomInButton.addShadow()
+        self.zoomOutButton.addShadow()
+        self.myLocationButton.addShadow()
         
         self.mapView.delegate = self
         
@@ -122,20 +129,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
         annotationView!.image = pointAnnotation.image.ofSize(width: 30, height: 30)?.rounded
         
         annotationView!.clipsToBounds = false
-        
-        let annotationLayer = annotationView!.layer
-        
-        annotationLayer.shadowColor = UIColor.black.cgColor
-        annotationLayer.shadowOpacity = 0.35
-        annotationLayer.shadowOffset = .zero
-        annotationLayer.shadowRadius = 6
-        annotationLayer.shadowPath = UIBezierPath(
-            roundedRect: CGRect(
-                origin: .zero,
-                size: CGSize(width: 30, height: 30)
-            ),
-            cornerRadius: 15
-        ).cgPath
+        annotationView!.addShadow()
         
         return annotationView
     }
