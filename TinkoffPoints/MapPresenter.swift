@@ -83,9 +83,9 @@ class MapPresenter
     }
     
     public func mapRegionChanged(_ region: MKCoordinateRegion) {
-        if !self.lastRegion.contains(region: region) {
-            self.lastRegion = region
-            
+//        if !self.lastRegion.contains(region: region) {
+//            self.lastRegion = region
+        
             interactor.cachedPoints(
                 center: region.center,
                 span: CLLocationCoordinate2D(
@@ -96,7 +96,7 @@ class MapPresenter
             )
             
             interactor.requestPoints(center: region.center, radius: Int(region.radius))
-        }
+//        }
     }
     
     

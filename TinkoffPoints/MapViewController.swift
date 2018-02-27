@@ -39,6 +39,8 @@ class MapViewController: UIViewController, MKMapViewDelegate
     //MARK: - Variables
     private let presenter = MapPresenter()
     
+    private let annotationsDisplayingQueue = DispatchQueue(label: "AnnotationsDisplayingQueue")
+    
     
     
     //MARK: - LifeCycle
@@ -71,8 +73,22 @@ class MapViewController: UIViewController, MKMapViewDelegate
         }
         
         presenter.displayAnnotations = { [unowned self] (freshAnnotations: [PointAnnotation]) -> Void in
-                self.mapView.removeAnnotations(self.mapView.annotations)
-                self.mapView.addAnnotations(freshAnnotations)
+            DispatchQueue.main.async {
+                self.annotationsDisplayingQueue.sync {
+                    let currentAnnotations = self.mapView.annotations.filter { !($0 is MKUserLocation) } as! [PointAnnotation]
+                    
+                    let removingAnnotations = currentAnnotations.filter { (annotation) -> Bool in
+                        !freshAnnotations.contains { $0.id == annotation.id }
+                    }
+                    
+                    let appendingAnnotations = freshAnnotations.filter { (annotation) -> Bool in
+                        !currentAnnotations.contains { $0.id == annotation.id }
+                    }
+                    
+                    self.mapView.removeAnnotations(removingAnnotations)
+                    self.mapView.addAnnotations(appendingAnnotations)
+                }
+            }
         }
         
         presenter.loaderHidden = { [unowned self] (hidden: Bool) in
