@@ -28,7 +28,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
     //MARK: - Variables
     private let mainContext = APP_DELEGATE.persistentContainer.viewContext
     private lazy var readContext = self.createReadManagedObjectContext()
-    private lazy var writeContext = self.createReadManagedObjectContext()
+    private lazy var writeContext = self.createWriteManagedObjectContext()
     
     private let partnersSerialQueue = DispatchQueue(label: "PartnersSerialQueue")
     
@@ -36,6 +36,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
     
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US")
         dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
         return dateFormatter
     }()
@@ -148,7 +149,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
         APIClient.GetPartners { [unowned self] (json, headers, error) in
             var needUpdate = false
             var lastModifiedLocally = UserDefaults.standard.partnersLastModified()
-
+            
             if
                 let lastModified = headers["Last-Modified"] as? String,
                 let date = self.dateFormatter.date(from: lastModified)
@@ -200,6 +201,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
             }
             
             partner.imageData = data
+            
             self.writeContext.insert(partner)
             
             freshPartners[partner.id!] = partner
@@ -210,6 +212,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
             
             self.mainContext.performAndWait {
                 do {
+                    self.mainContext.mergePolicy = NSOverwriteMergePolicy
                     try self.mainContext.save()
                 }
                 catch {
@@ -269,6 +272,7 @@ class MapInteractor : NSObject, CLLocationManagerDelegate
             
             self.mainContext.performAndWait {
                 do {
+                    self.mainContext.mergePolicy = NSOverwriteMergePolicy
                     try self.mainContext.save()
                 }
                 catch {
