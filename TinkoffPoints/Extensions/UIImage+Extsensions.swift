@@ -16,7 +16,7 @@ extension UIImage
     func ofSize(width: CGFloat, height: CGFloat) -> UIImage? {
         let size = CGSize(width: width, height: height)
         
-        UIGraphicsBeginImageContextWithOptions(size, true, 1)
+        UIGraphicsBeginImageContextWithOptions(size, true, UIScreen.main.scale)
         
         self.draw(in: CGRect(origin: .zero, size: size))
         
@@ -28,7 +28,7 @@ extension UIImage
     }
     
     var rounded: UIImage? {
-        UIGraphicsBeginImageContextWithOptions(self.size, false, 1)
+        UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
         
         let rect = CGRect(origin: .zero, size: self.size)
         
